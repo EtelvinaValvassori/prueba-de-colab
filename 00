@@ -1,0 +1,46 @@
+from google.colab import files
+uploaded = files.upload()
+
+
+
+import pandas as pd
+import numpy as np
+
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+
+df = pd.read_excel("Base de Datos Clientes.xlsx")
+
+df.head()
+
+total_validos = df.count()
+total_registros = len(df)
+porcentaje_validos = (total_validos / total_registros) * 100
+
+
+# Convertir columnas numéricas a tipo numérico (esto puede generar errores si hay valores no numéricos)
+df_numeric = df.apply(pd.to_numeric, errors='coerce')
+
+# Calcular las estadísticas
+media = df_numeric.mean()
+mediana = df_numeric.median()
+desviacion_estandar = df_numeric.std()
+
+
+valores_ausentes = df.isnull().sum()
+
+valores_erroneos = ((df_numeric < min_valor) | (df_numeric > max_valor)).sum()
+
+analysis_df = pd.DataFrame({
+    'Total de Valores Válidos': total_validos,
+    'Porcentaje de Valores Válidos': porcentaje_validos,
+    'Media': media,
+    'Mediana': mediana,
+    'Desviación Estándar': desviacion_estandar,
+    'Valores Ausentes': valores_ausentes,
+    'Valores Fuera de Rango': valores_erroneos
+
+})
+print(analysis_df)
